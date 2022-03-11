@@ -185,7 +185,7 @@ export default function Home() {
 
                 const time = i * 0.5;
                 return (
-                  <Draggable>
+                  <Draggable key={i}>
                     <div
                       className={styles.galleryBox}
                       style={{
