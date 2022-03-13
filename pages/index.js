@@ -43,7 +43,7 @@ export default function Home() {
   const [currDocRef, setCurrDocRef] = useState("");
   const [error, setError] = useState("");
 
-  const [currState, setCurrState] = useState("gallery");
+  const [currState, setCurrState] = useState("");
 
   function makeid(length) {
     var result = "";
