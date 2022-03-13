@@ -43,7 +43,7 @@ export default function Home() {
   const [currDocRef, setCurrDocRef] = useState("");
   const [error, setError] = useState("");
 
-  const [currState, setCurrState] = useState("");
+  const [currState, setCurrState] = useState("gallery");
 
   function makeid(length) {
     var result = "";
@@ -64,6 +64,7 @@ export default function Home() {
     await updateDoc(currDocRef, {
       response: response,
     });
+    setError("");
     setCurrState("gallery");
   }
 
@@ -78,6 +79,7 @@ export default function Home() {
       question: askedQuestion,
       response: "",
     });
+    setError("");
     setCurrState("response");
   }
 
@@ -161,9 +163,6 @@ export default function Home() {
             <p className={styles.animation2} style={{ fontStyle: "italic" }}>
               {question}
             </p>
-            {/* <p className={[styles.response, styles.animation3].join(" ")}>
-              What do you say?
-            </p> */}
             <textarea
               rows="2"
               cols="40"
@@ -186,9 +185,12 @@ export default function Home() {
           <>
             {/* <p>About</p> */}
             <div className={styles.gallery}>
-              <h2 className={styles.title}>
-                See what others before you have asked and answered
-              </h2>
+              <div className={styles.galleryTitle}>
+                <h2 className={styles.title}>
+                  See what others before you have asked and answered
+                </h2>
+                <h3>(notes are draggable!)</h3>
+              </div>
               {allQuestions.map((question, i) => {
                 const randomX = Math.random() * ((window.innerWidth * 4) / 5);
                 const randomY = Math.random() * window.innerHeight;
@@ -202,13 +204,11 @@ export default function Home() {
                         position: "absolute",
                         top: randomY,
                         left: randomX,
-                        // transform: `rotate(${rotation}deg)`,
-                        // animation: `fadeIn 2s`,
                         animationDelay: `${time}s`,
                       }}
                     >
                       <h3 className={styles.question}>{question.question}</h3>
-                      <p>{question.response}</p>
+                      <p className={styles.response}>{question.response}</p>
                     </div>
                   </Draggable>
                 );
