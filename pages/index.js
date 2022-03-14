@@ -37,6 +37,7 @@ export default function Home() {
   // Data being fetched from
   const [question, setQuestion] = useState("");
   const [allQuestions, setAllQuestions] = useState([]);
+  const [unansweredQuestions, setUnansweredQuestions] = useState([]);
 
   const [response, setResponse] = useState("");
   const [askedQuestion, setAskedQuestion] = useState([]);
@@ -87,18 +88,25 @@ export default function Home() {
     const fetchData = async () => {
       const querySnapshot = await getDocs(collection(db, databaseName));
       const questions = [];
+      const unanswered = [];
       querySnapshot.forEach((currDoc) => {
-        console.log(currDoc.id, " => ", currDoc.data());
+        // console.log(currDoc.id, " => ", currDoc.data());
         const data = currDoc.data();
         if (data.response.length == 0) {
-          if (question.length == 0) {
-            setCurrDocRef(doc(db, databaseName, currDoc.id));
-            setQuestion(data.question);
-          }
+          unanswered.push([data.question, currDoc.id]);
+          // if (question.length == 0) {
+          // setCurrDocRef(doc(db, databaseName, currDoc.id));
+          //   setQuestion(data.question);
+          // }
         } else {
           questions.push(data);
         }
       });
+      const currQuestion =
+        unanswered[Math.round(Math.random() * unanswered.length)];
+      setCurrDocRef(doc(db, databaseName, currQuestion[1]));
+      setQuestion(currQuestion[0]);
+      setUnansweredQuestions(unanswered);
       setAllQuestions(questions);
     };
 
@@ -112,7 +120,6 @@ export default function Home() {
         <meta name="description" content="ask questions, get answers" />
         <link rel="icon" href="/icon.png" />
       </Head>
-      {/* <div onClick={setPage("gallery")}>Gallery</div> */}
 
       <div className={styles.main}>
         {currState === "" ? (
@@ -183,23 +190,30 @@ export default function Home() {
           </>
         ) : currState === "gallery" ? (
           <>
-            {/* <p>About</p> */}
             <div className={styles.gallery}>
               <div className={styles.galleryTitle}>
                 <h2 className={styles.title}>
                   See what others before you have asked and answered
                 </h2>
-                <h3>(notes are draggable!)</h3>
+                <h3>
+                  (notes are draggable, and you can scroll around the canvas!)
+                </h3>
               </div>
               {allQuestions.map((question, i) => {
-                const randomX = Math.random() * ((window.innerWidth * 4) / 5);
-                const randomY = Math.random() * window.innerHeight;
-
+                const rand = Math.random();
+                const randomX = Math.random() * 2 * window.innerWidth;
+                const randomY = Math.random() * 2 * window.innerHeight;
+                const color =
+                  rand < 0.33
+                    ? styles.color1
+                    : rand > 0.66
+                    ? styles.color2
+                    : styles.color3;
                 const time = i * 0.5;
                 return (
                   <Draggable key={i}>
                     <div
-                      className={styles.galleryBox}
+                      className={[styles.galleryBox, color].join(" ")}
                       style={{
                         position: "absolute",
                         top: randomY,
