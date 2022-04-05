@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Image from "next/image";
+// import Image from "next/image";
 import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import Draggable from "react-draggable";
@@ -90,14 +90,9 @@ export default function Home() {
       const questions = [];
       const unanswered = [];
       querySnapshot.forEach((currDoc) => {
-        // console.log(currDoc.id, " => ", currDoc.data());
         const data = currDoc.data();
         if (data.response.length == 0) {
           unanswered.push([data.question, currDoc.id]);
-          // if (question.length == 0) {
-          // setCurrDocRef(doc(db, databaseName, currDoc.id));
-          //   setQuestion(data.question);
-          // }
         } else {
           questions.push(data);
         }
@@ -119,6 +114,14 @@ export default function Home() {
         <title>Questions and Answers</title>
         <meta name="description" content="ask questions, get answers" />
         <link rel="icon" href="/icon.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@zhaovan8" />
+        <meta name="twitter:title" content="Questions and Answers" />
+        <meta name="twitter:description" content="ask questions, get answers" />
+        <meta
+          name="twitter:image"
+          content="www.questionsandanswers.app/twitter-bg.png"
+        />
       </Head>
 
       <div className={styles.main}>
